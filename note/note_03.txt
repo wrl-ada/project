@@ -1,0 +1,54 @@
+1.采用HTTP Basic Authentication
+模式进行身份信息传输
+　--首先将身份信息拼一个字符串
+　　"用户名:密码"
+　--将身份信息采用Base64算法编码
+　--将信息采用Request Header传输
+   "Authorization":"Basic xxxx"
+  --发送请求信息
+{
+status:xxx,
+msg:"xxx",
+data:{userToken:"xxx","userId":xxx}
+}
+  
+ 2.客户端登录检查
+ 　用户登录成功，生成一个令牌，通过NoteResult
+ 给HTML返回；然后采用cookie_util.js将令牌信息
+ 写入Cookie。
+ 　在其他需要登录的页面，嵌入获取Cookie令牌信息
+ 的检测，如果没有被视为未登录用户，跳转到登录页面。
+ 
+ 日后可以追加服务器端检测
+ --每次发请求将令牌信息发送给服务器，服务器可以
+ 使用拦截器将请求传递的令牌跟db表中的令牌比对。
+
+
+ 3.注册实现
+
+　功能：用户输入信息后，点注册按钮发出请求，
+请求完成，有错误提示信息；没有错误进入登录页面
+
+ a.发送Ajax请求
+ 　点注册按钮，并提交表单数据。
+ 　用户名，昵称，密码
+
+ b.请求处理
+
+/user/regist.do-->DispatcherServlet
+-->handlerMapping-->RegistController
+-->UserService-->UserDao-->cn_user(insert添加操作)
+-->返回NoteResult格式的json结果
+
+c.Ajax回调函数
+　根据NoteResult结果，有错误提示，
+没错误返回登录界面
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  

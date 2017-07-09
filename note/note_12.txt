@@ -1,0 +1,92 @@
+1.关联映射
+可以通过对象属性访问相关对象的数据
+a.集合关联属性
+User-->NoteBook
+user.getBooks();
+b.对象关联属性
+NoteBook-->User
+book.getUser()
+
+
+sql加载当前对象--->sql加载关联属性数据
+
+多表关联查询sql一次性查询出来
+
+===========写SQL==========
+1.查询笔记本ID,笔记本名称,所属用户名
+select book.cn_notebook_id,
+       book.cn_notebook_name,
+       usr.cn_user_name
+from cn_notebook book
+   join cn_user usr 
+   on(book.cn_user_id=usr.cn_user_id)
+
+2.查询笔记本ID,笔记本名称,包含笔记数量
+select book.cn_notebook_id,
+       book.cn_notebook_name,
+       count(note.cn_note_id) as num
+from cn_notebook book
+ left outer join cn_note note 
+ on(book.cn_notebook_id=note.cn_notebook_id)
+group by book.cn_notebook_id,
+	book.cn_notebook_name
+
+3.查询用户名,笔记本数量,笔记数量
+
+select usr.cn_user_name,
+  count(distinct book.cn_notebook_id) book_num,
+  count(note.cn_note_id) note_num    
+from cn_user usr
+left outer join cn_notebook book 
+  on(usr.cn_user_id=book.cn_user_id)
+left outer join cn_note note 
+  on(book.cn_notebook_id=note.cn_notebook_id) 
+group by usr.cn_user_name
+
+
+
+部门表　部门编号　部门名
+员工表　员工编号　员工姓名　性别　工资
+
+1.
+部门编号　部门名　男员工数　女员工数　总员工数
+
+2.
+部门编号　部门名　平均工资　高于平均工资人数　低于平均工资人数
+
+
+1.项目干啥用（1-2分）
+*2.用了哪些技术（详细）
+　--用了哪些技术
+　--技术在项目中的作用
+*3.开发中遇到哪些问题，怎么解决
+（技术使用中遇到哪些问题）
+*4.使用到了哪些特殊设计思想
+页面采用HTML界面,利用Ajax与服务器交互
+（加快交互和响应，局部刷新提升用户体验）
+无会话状态请求响应处理模式
+（集群部署）
+*5.项目收获
+
+
+
+<insert id="save" 
+  parameterType="org.entity.MyUser">
+  <selectKey keyProperty="user_id"
+    order="BEFORE">
+    select user_seq.nextval from dual
+  </selectKey>
+
+  insert into t_user (user_id,user_name)
+   values (#{user_id},#{user_name})
+</insert>
+
+
+
+
+
+
+
+
+
+

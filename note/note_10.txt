@@ -1,0 +1,85 @@
+1.采用AOP实现记录Service异常信息功能
+a.切入点
+　所有Service方法
+  within(org.tarena.note.service..*)
+b.切面
+　记录Service异常信息功能(文件记录)
+c.通知
+　Service发生异常调用切面处理
+  异常通知
+2.AOP实现原理
+　Spring采用动态代理技术实现
+　--采用JDK Proxy API
+　　适用有接口组件
+public class $Proxy17 implements 接口{
+　//重写目标组件方法
+  public void xx(){
+　　//调用切面功能
+　　//调用目标组件功能
+　}
+}
+
+  --采用CGLIB工具包
+　　适用没有接口组件
+public class XXX extends 目标组件{
+  //重写原有目标组件方法
+  public void xxx(){
+　　//调用切面功能
+　　//调用目标组件功能
+  }
+}
+
+  (都可以根据现有类动态生成一个新类)
+Spring默认有接口采用Proxy,没接口采用
+CGLIB方案。可以采用属性
+proxy-target-class="true"强制采用CGLIB
+生成代理。
+
+=============Log4j工具==============
+日志工具：用于记录日志信息
+Log4j优点：
+　--可以通过配置改变输出方式
+　　(例如文件,控制台输出)
+　--可以通过配置改变输出消息级别
+　　(调试,普通,警告,异常,致命)
+  --可以通过配置改变消息输出格式
+Log4j使用方法
+ --引入log4j.jar
+ --src下加log4j.properties文件
+ --在代码中使用Logger方法输出消息
+==============================
+MyBatis动态SQL
+可以在SQL定义的XML文件中动态拼凑一个
+SQL语句。在XML中可以使用以下标签
+<if test=""></if>
+<choose>
+  <when test=""></when>
+  <when test=""></when>
+  <otherwise></otherwise>
+</choose>
+<foreach></foreach>
+
+<where> : 可以生成一个Where关键字
+ 可以将内容前面多于的and或or过滤掉
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+　

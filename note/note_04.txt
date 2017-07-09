@@ -1,0 +1,27 @@
+1.笔记本列表显示
+ 一进入edit.html就显示当前登录者
+的笔记本列表。
+
+　a.发送请求
+　　一进入页面就自动发送ajax请求
+　$(function(){
+ //发送ajax,提交Cookie中的用户ID
+  });
+
+  b.请求处理
+/notebook/loadbooks.do
+-->DispatcherServlet-->handlerMapping
+-->LoadBooksController
+-->NoteBookService
+-->NoteBookMapperDao-->cn_notebook(select)
+-->返回NoteResult结构的json数据
+
+　c.Ajax回调处理
+　　解析json结果，显示成笔记本列表
+
+
+
+  http://localhost:8080/note/notebook/loadbooks.do?userId=48595f52-b22c-4485-9244-f4004255b972
+  
+List<Map>
+

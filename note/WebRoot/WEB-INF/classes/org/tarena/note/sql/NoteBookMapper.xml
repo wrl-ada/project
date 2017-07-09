@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="org.tarena.note.dao.NoteBookMapperDao">
+	
+	<select id="findBooksByUser" 
+		parameterType="string" 
+		resultType="org.tarena.note.entity.NoteBook">
+	select cn_notebook_id,cn_notebook_name 
+	from cn_notebook
+	where cn_user_id=#{userId}
+	order by cn_notebook_createtime desc
+	</select>
+	
+	<select id="findByNameAndUser" 
+		parameterType="map" 
+		resultType="org.tarena.note.entity.NoteBook">
+	select * from cn_notebook
+	where cn_notebook_name=#{bookName} 
+		and cn_user_id=#{userId}
+	</select>
+	
+	<insert id="save" 
+		parameterType="org.tarena.note.entity.NoteBook">
+	insert into cn_notebook
+		(cn_notebook_id,cn_user_id,cn_notebook_type_id
+		,cn_notebook_name,cn_notebook_desc,cn_notebook_createtime)
+	values (#{cn_notebook_id},#{cn_user_id},
+		#{cn_notebook_type_id},#{cn_notebook_name},
+		#{cn_notebook_desc},#{cn_notebook_createtime})
+	</insert>
+	
+	<!-- 关联映射 -->
+	<select id="findById" parameterType="string"
+		resultMap="bookMap">
+	select * from cn_notebook
+	where cn_notebook_id=#{bookId}
+	</select>
+	<resultMap id="bookMap" type="org.tarena.note.entity.NoteBook">
+		<id property="cn_notebook_id" column="cn_notebook_id"/>
+		<result property="cn_user_id" column="cn_user_id"/>
+		<!-- 对象关联属性user -->
+		<association property="user" 
+			javaType="org.tarena.note.entity.User"
+			select="findUser" column="cn_user_id">
+		</association>
+	</resultMap>
+	<select id="findUser" parameterType="string"
+		resultType="org.tarena.note.entity.User">
+		select * from cn_user
+		where cn_user_id=#{userId}
+	</select>
+	
+	<select id="findAll" resultMap="bookMap1">
+	select * 
+	from cn_notebook book 
+		join cn_user usr 
+		on(book.cn_user_id=usr.cn_user_id)
+	</select>
+	<resultMap id="bookMap1" 
+		type="org.tarena.note.entity.NoteBook">
+		<id property="cn_notebook_id" column="cn_notebook_id"/>
+		<result property="cn_user_id" column="cn_user_id"/>
+		<result property="cn_notebook_type_id" column="cn_notebook_type_id"/>
+		<result property="cn_notebook_name" column="cn_notebook_name"/>
+		<result property="cn_notebook_desc" column="cn_notebook_desc"/>
+		<result property="cn_notebook_createtime" column="cn_notebook_createtime"/>
+		<association property="user" 
+			javaType="org.tarena.note.entity.User">
+			<id property="cn_user_id" column="cn_user_id"/>
+			<result property="cn_user_name" column="cn_user_name"/>
+			<result property="cn_user_password" column="cn_user_password"/>
+			<result property="cn_user_token" column="cn_user_token"/>
+			<result property="cn_user_desc" column="cn_user_desc"/>
+		</association>
+	</resultMap>
+	
+	
+</mapper>

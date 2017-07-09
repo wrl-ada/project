@@ -1,0 +1,18 @@
+1.点击笔记本显示笔记列表
+
+a.发送Ajax请求
+  单击笔记本li，发送Ajax请求，需要提交笔记本ID
+b.请求处理
+  /note/loadnotes.do-->LoadNotesController
+  -->NoteService
+  -->NoteMapperDao-->cn_note(select)
+  --返回NoteResult结构的json结果
+c.Ajax回调处理
+　解析json结果，循环生成笔记列表li
+
+2.笔记添加
+
+/note/add.do-->AddNoteController
+-->NoteService
+-->NoteMapperDao-->cn_note(insert)
+-->返回NoteResult格式的json结果

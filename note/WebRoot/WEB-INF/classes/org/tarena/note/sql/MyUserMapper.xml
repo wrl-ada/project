@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="org.tarena.note.dao.MyUserDao">
+
+<insert id="save" 
+	parameterType="org.tarena.note.entity.MyUser"
+	useGeneratedKeys="true" keyProperty="user_id">
+insert into t_user (user_name) values (#{user_name})
+</insert>
+
+</mapper>

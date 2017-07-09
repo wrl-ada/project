@@ -1,0 +1,41 @@
+1.on函数
+可以给先有和未来匹配元素绑定处理
+
+jquery对象.on(事件类型,选择器,fn函数)
+
+在jquery对象中如果有符合选择器元素，
+绑定一个事件fn函数
+
+2.创建笔记本操作
+　a.发送ajax请求
+　　点击创建按钮时发送，提交笔记本名称，用户ID
+
+  b.请求处理
+  /notebook/add.do-->AddBookController
+  -->NoteBookService
+  -->NoteBookMapperDao-->cn_notebook(insert)
+  -->返回NoteResult结构的json结果
+
+  c.ajax回调处理
+　　有错误提示错误信息；没有错误关闭添加窗口，
+　　将笔记本追加到列表区　　
+
+
+{"status":0,
+ "data":[
+    {"cn_note_id":"77f61ff8-e7a1-43ac-9740-5d60b8b15b76",
+      "cn_note_title":"新建笔记"},
+    {"cn_note_id":"687e77a3-64e3-44ad-875b-83517a158196",
+      "cn_note_title":"撒地方"},
+    {"cn_note_id":"84b2d98b-af39-4655-8aa8-d8869d043cca",
+       "cn_note_title":"阿斯顿发生大幅"},
+    {"cn_note_id":"c347f832-e2b2-4cb7-af6f-6710241bcdf6",
+    "cn_note_title":"啊啊啊啊"}
+   ],
+   "msg":"查询成功"}
+
+
+
+
+
+

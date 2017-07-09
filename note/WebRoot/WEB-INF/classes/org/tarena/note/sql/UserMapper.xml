@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="org.tarena.note.dao.UserMapperDao">
+
+<insert id="save" 
+	parameterType="org.tarena.note.entity.User">
+insert into cn_user (cn_user_id,cn_user_name,
+cn_user_password,cn_user_token,cn_user_desc)
+values (#{cn_user_id},#{cn_user_name},
+#{cn_user_password},#{cn_user_token},#{cn_user_desc})
+</insert>
+
+<select id="findByName" parameterType="string"
+	resultType="org.tarena.note.entity.User">
+select * from cn_user 
+where cn_user_name=#{name}
+</select>
+
+<update id="updateToken" parameterType="map">
+update cn_user set cn_user_token=#{userToken}
+where cn_user_id=#{userId}
+</update>
+
+<select id="findById" parameterType="string"
+	resultMap="userMap">
+select * from cn_user 
+where cn_user_id=#{userId}
+</select>
+<resultMap id="userMap" 
+	type="org.tarena.note.entity.User">
+	<id property="cn_user_id" column="cn_user_id"/>
+	<result property="cn_user_name" column="cn_user_name"/>
+	<result property="cn_user_password" column="cn_user_password"/>
+	<result property="cn_user_token" column="cn_user_token"/>
+	<result property="cn_user_desc" column="cn_user_desc"/>
+	<!-- 关联属性books -->
+	<collection property="books" javaType="java.util.List"
+		ofType="org.tarena.note.entity.NoteBook"
+		select="loadBooks" column="cn_user_id">
+	</collection>
+</resultMap>
+<select id="loadBooks" parameterType="string"
+	resultType="org.tarena.note.entity.NoteBook">
+	select * from cn_notebook
+	where cn_user_id=#{userId}
+</select>
+
+
+
+</mapper>

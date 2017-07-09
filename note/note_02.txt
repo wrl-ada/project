@@ -1,0 +1,30 @@
+======================
+1.登录
+
+输入用户名和密码，点击登录按钮，有错提示错误，正确
+进入edit.html界面.
+
+a.流程设计
+  
+　--发送请求，点登录按钮发送ajax请求,
+　　提交用户名和密码
+
+　--业务处理流程
+/user/login.do-->DispatcherServlet-->HanlerMapping
+-->LoginController-->UserService-->UserDao
+-->cn_user(查询)-->返回JSON结果
+
+　--Ajax回调函数，有错误提示；没错误跳转道edit.html
+　　
+首先实现业务流程处理
+　1）实现UserDao
+　--引入相关开发包spring,mybatis,mybatis-spring.jar
+  --在src添加applicatioContext.xml
+  --编写实体类User
+  --编写UserMapper.xml定义SQL
+  --编写UserMapperDao接口
+  --配置MapperScannerConfigurer扫描所有MapperDao
+  　生成接口实现
+  --测试MapperDao
+  2）实现UserService
+

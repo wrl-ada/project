@@ -1,0 +1,16 @@
+1.MyBatis关联映射
+表与表之间有关系，例如用户-->笔记本-->笔记
+表之间的关系，是用关联字段建立。
+
+对象之间也可以建立关系，采用关联属性建立。
+
+public class User{
+
+ //user属性
+ //关联属性
+ private List<NoteBook> books;
+
+}
+
+user.getBooks();//提取了cn_notebook表相关数据
+
