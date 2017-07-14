@@ -1,0 +1,16 @@
+1.账务账号模块
+  功能:用户需要使用电信服务器,首先开通一个账务账号.
+
+ 1) 账务账号列表显示的实现
+  涉及的数据表:ACCOUNT
+
+ /account/account_list-->AccountListController
+-->AccountMapperDao-->account_list.jsp
+
+  a.添加一个Account实体类
+  b.添加一个AccountMap.xml的SQL定义
+  c.定义一个查询的SQL
+  d.添加一个AccountMapperDao接口
+  e.测试MapperDao(TestAccountDao)
+
+

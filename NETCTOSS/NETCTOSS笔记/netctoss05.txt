@@ -1,0 +1,60 @@
+js,ajax-->客户端数据格式校验
+jQuery-->jQuery插件
+=======RESTful应用=========
+资费管理模块(原请求格式)
+---/fee/fee_list.from?page=1
+---/fee/toAdd.from
+---/fee/addCost.from
+---/fee/fee_delete.from?id=1
+---/fee/toUpdate.from?id=1
+---/fee/upateCost.from
+---/fee/checkname.from?name=tom
+
+------按RESUT风格设计的请求格式--------
+/fee/{id} -->GET-->按id查询
+/fee/{id}-->PUT-->按id更新
+/fee/{id}-->DELETE-->按id删除
+分页
+/fee/list/{page}-->GET-->按page查询列表
+更新
+/fee/{id}-->PUT-->按id更新
+/fee/{id}/toedit-->GET-->按id查询进入更新页面
+添加
+/fee/add --> POST -->添加处理
+/fee/toadd-->GET-->进入添加页面
+资费名检测
+/fee/check/{name}-->GET-->按name查询处理
+/fee/check/套餐A
+======重构原来的资费列表程序=========
+1.修改Controller部分的业务处理方法,
+  使用@RequestMapping指定匹配的REST URL和提交类型
+  使用@PathVariable获取请求URL中的路径变量
+2.在web.xml中将DispatcherServlet处理的
+url-pattern改成 /
+3.在applicationContext.xml中追加定义,支持静态资源访问
+<mvc:default-servlet-handler/>
+4.修改jsp部分,引入css,js,gif路径,建议用绝对路径.
+修改请求链接
+
+http://localhost:8080/netctoss/cost/list/1
+../${c.id}/toedit
+http://localhost:8080/netctoss/cost/1/toedit
+======重构资费更新==========
+1.为了支持PUT提交方式,在web.xml中配置HiddenHttpMethodFilter
+2.使用<form:form method="put">
+========重构资费添加=========
+在进行资费名是否重复检测中,由于采用get提交
+/fee/check/中文,避免乱码,需要在tomcat/conf/server.xml
+中追加URIEncoding="UTF-8"
+    <Connector port="8088" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443" 
+               URIEncoding="UTF-8"/>
+
+=====重构资费删除=======
+/fee/{id}-->DELETE-->按id删除
+
+采用ajax方式发出delete请求,Controller处理完毕返回一个
+json结果,js回调函数再根据结果调用window.location刷新列表
+
+

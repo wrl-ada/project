@@ -1,0 +1,54 @@
+1.NETCTOSS系统权限设计
+a.功能设计:
+  管理员-->角色-->权限操作
+  一个管理员可以分配多个角色,
+ 每个角色可以分配多个权限操作
+
+ 包括权限分配和权限检查两部分.
+  权限分配:角色管理,管理员管理
+  权限检查:首先在登录成功时,提取管理员可以做的URL操作列表,放入到session.之后使用一个拦截器拦截每次发出的请求,如果请求地址在session列表中,允许操作,否则不允许定位到无权限提示页面.
+
+ b.数据库设计:
+   管理员表ADMIN_INFO
+   角色表ROLE_INFO
+   权限操作privileges.xml
+  管理员和角色关系表ADMIN_ROLE
+  角色和权限操作关系ROLE_PRIVILEGE
+ 
+========管理员列表显示=========== 
+1.搜集信息项
+-权限ID
+*角色名称
+=管理员ID	
+=姓名	
+=登录名	
+=电话	
+=电子邮件	
+=授权日期	
+*拥有角色(将管理员所有角色显示)
+2.过滤重复
+3.判断属于哪个数据源
+  *ROLE
+  =ADMIN_INFO
+  -ROLE_PRIVILEGE
+
+4.编写SQL
+
+ select a.ID,
+            a.NAME,
+            a.ADMIN_CODE,
+            a.TELEPHONE,
+            a.EMAIL,
+            a.ENROLLDATE,
+            r.NAME
+ from ROLE r,ADMIN_INFO a,
+          ROLE_PRIVILEGE rp,ADMIN_ROLE ar
+ where r.ID=rp.ROLE_ID
+     and r.ID=ar.ROLE_ID
+     and ar.ADMIN_ID=a.ID
+   //动态添加下面查询条件
+    and rp.PRIVILEGE_ID=?
+    and r.NAME=?
+
+
+

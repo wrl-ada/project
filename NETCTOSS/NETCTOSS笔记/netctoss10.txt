@@ -1,0 +1,85 @@
+ADMIN_INFO管理员表-->登录功能
+COST-->资费模块
+ROLE,ROLE_PRIVILEGE,privileges.xml-->角色模块
+ACCOUNT-->账务账号模块
+-------------------------
+1.业务账号模块
+ 1)涉及SERVICE业务账号表
+  用户需要使用电信服务器,首先开通一个账务账号ACCOUNT,
+需要使用某项业务时,需要开通相应的业务账号SERVICE.
+ 一个ACCOUNT可以包含多个SERVICE.
+每个SERVICE开通时需要指定一个COST资费标准.
+ 2)业务账号列表功能
+    -->组合查询
+   a.搜集页面条件和结果的数据项    
+*OS 账号 -OS_USERNAME
+*服务器 IP -UNIX_HOST
+=身份证 -IDCARD_NO
+*状态 -STATUS
+*业务ID -ID	
+*账务账号ID -ACCOUNT_ID		
+=姓名 -REAL_NAME			
+&资费 -NAME
+  b.去除重复项
+  c.分析数据项在哪些数据表中
+*SERVICE
+=ACCOUNT
+&COST
+  d.写查询语句
+  select  s.ID,s.ACCOUNT_ID,
+              a.IDCARD_NO,
+              a.REAL_NAME,
+              s.OS_USERNAME,
+              s.STATUS,
+              s.UNIX_HOST,
+              c.NAME
+  from SERVICE s 
+           join ACCOUNT a on (s.ACCOUNT_ID=a.ID)
+           join COST c on(s.COST_ID=c.ID)
+  where  
+    //动态根据用户输入添加查询条件
+  ====================
+   编写实体类
+   编写Map.xml,定义SQL
+   定义MapperDao及其方法
+   按下面流程编写Controller
+  /service/service_list/*/*/*/-1
+-->ServiceListController.execute  
+-->ServiceMapperDao
+-->service/service_list.jsp
+
+    -->分页处理
+
+========登录===========
+按传统的REST规则,应该以get提交,
+url=/login/login/{username}/{password}/{code}
+为了用户信息安全性,需要将账号信息放入Request请求
+的Header部分传输.
+客户端如何将信息放入Header部分
+$.ajax({
+   url:"/netcotss/login/login",
+   type:"get",
+   success:function(data){//data是服务器返回json结果
+      //处理json响应结果
+   },
+   beforeSend:function(xhr){//xhr为XMLHttpRequest
+       xhr.setRequestHeader("key","value");
+       //...
+   }
+})
+
+服务器端Controller如何接受Header数据
+  @RequestHeader("key") String 变量
+
+
+========登录REST设计=============
+/login/login/{code} (ajax)-->CheckLoginController
+-->findByAdminCodeAndPwd
+-->json结果响应
+
+map.put("user","tom");
+map.put("pwd","123");
+--->{"user":"tom","pwd":"123"}
+
+
+

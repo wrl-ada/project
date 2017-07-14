@@ -1,0 +1,50 @@
+create table emp(
+   id int primary key auto_increment,
+   name varchar(20),
+   sex varchar(2),
+   age int
+);
+
+insert into emp (name,sex,age) value ('tom','M',20);
+
+=========================
+create table emp(
+   id number(4) primary key,
+   name varchar2(20),
+   sex varchar2(2),
+   age number(3)
+);
+
+create sequence emp_seq start with 1;
+
+insert into emp (id,name,sex,age) value (emp_seq.nextval,'tom','M',20);
+
+
+=========主键映射==============
+作用:在插入操作时,可以将自动增长的主键值填充到
+实体对象主键属性中,这样执行插入后,就可以通过
+这个实体对象获取插入主键值.
+dao.save(dept);//插入
+dept.getDeptno();//可以获取主键值
+如果主键值采用的MySQL自动增长,使用下面定义格式
+<insert id="addDept“ parameterType="Dept"
+    keyProperty="deptno" useGeneratedKeys="true" >
+   insert语句.
+</insert>
+
+如果主键值采用Oracle序列方式,使用下面格式
+<insert id="addDept" parameterType="Dept">
+     <selectKey keyProperty="deptno“ order="BEFORE”
+                         resultType="int">
+             select dept_seq.nextval from dual
+    </selectKey>
+     insert语句.
+</insert>
+
+
+
+select * from emp e join dept d on(e.deptno=d.deptno)
+where e.empno=0;
+
+
+

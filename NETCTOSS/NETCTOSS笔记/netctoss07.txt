@@ -1,0 +1,33 @@
+1.Spring事务控制
+ 1)Spring AOP机制(了解)
+
+案例1:记录操作日志
+  在每次调用dao的方法时,记录下使用信息
+AOP:
+  方面:记录使用信息
+  目标:所有dao的方法-->within(org.tarena.dao..*)
+  通知:前置通知,先执行方面,后执行目标处理
+  <aop:before>  前置
+  <aop:after-returning> 后置
+  <aop:after>  最终
+  <aop:around> 环绕
+  <aop:after-throwing> 异常
+  
+//find开头方法不执行,其他方法执行
+execution(修饰符? 返回类型  方法名(参数) throws 异常类型?)
+execution(* find*(..))   
+
+案例2:使用注解配置前面案例
+  a.在applicationContext.xml中开启注解配置
+   <aop:aspectj-autoproxy/>
+  b.在方面组件使用@Aspect和@Before注解
+
+案例3:当所有dao方法,抛出异常时,将异常信息记录下来
+  方面:记录异常
+  目标:所有dao方法--确定切入点
+  通知:异常通知
+
+ *2)Spring 事务管理(应用)
+
+
+

@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="org.tarena.netctoss.dao.CostMapperDao">
+    <!-- 查找资费 -->
+	<select id="findAll" 
+	resultType="org.tarena.netctoss.entity.Cost">
+		select * from COST order by ID
+	</select>
+	<!-- 删除资费 -->
+	<delete id="deleteCost" 
+	        parameterType="int">
+		delete from COST where ID=#{id}
+	</delete>
+	
+<!-- create sequence cost_seq start with 100; -->
+<!-- 增加资费 -->
+	<insert id="saveCost" 
+parameterType="org.tarena.netctoss.entity.Cost">
+<selectKey keyProperty="id" order="BEFORE" resultType="int">
+	select cost_seq.nextval from dual
+</selectKey>
+	insert into COST 
+	(ID,NAME,BASE_DURATION,
+	 BASE_COST,UNIT_COST,STATUS,
+	 DESCR,CREATIME,STARTIME,COST_TYPE)
+	values (#{id},#{name},
+	 #{base_duration,jdbcType=NUMERIC},
+	 #{base_cost,jdbcType=NUMERIC},
+	 #{unit_cost,jdbcType=NUMERIC},'1',
+	 #{descr},sysdate,null,#{cost_type})
+	</insert>
+	<!-- 修改第一步 -->
+	<select id="findById" parameterType="int"
+		resultType="org.tarena.netctoss.entity.Cost">
+		select * from COST where ID=#{id}
+	</select>
+	<!-- 修改 -->
+	<update id="updateCost" 
+		parameterType="org.tarena.netctoss.entity.Cost">
+		update COST 
+		set NAME=#{name},
+			BASE_DURATION=#{base_duration,jdbcType=NUMERIC},
+			BASE_COST=#{base_cost,jdbcType=NUMERIC},
+			UNIT_COST=#{unit_cost,jdbcType=NUMERIC},
+			DESCR=#{descr,jdbcType=VARCHAR},
+			COST_TYPE=#{cost_type}
+		where ID=#{id}
+	</update>
+	<!-- 启动 -->
+	<update id="updateStatus" parameterType="int">
+		update COST set STATUS = '0',STARTIME=sysdate where id=#{id}
+	</update>
+	<!-- 分页 -->
+	<select id="findPage" 
+	parameterType="org.tarena.netctoss.entity.Page"
+	resultType="org.tarena.netctoss.entity.Cost">
+	select *
+	from
+	  (select t1.*,rownum rn
+	   from (select * from cost 
+	         order by id) t1
+	  )
+	where rn between #{begin} and #{end}
+	</select>
+	
+	<select id="findRows" resultType="int">
+		select count(*) from COST
+	</select>
+	<!-- 检查资费名是否重复 -->
+	<select id="findByName" parameterType="java.lang.String" resultType="org.tarena.netctoss.entity.Cost">
+		select * from COST where NAME=#{name}
+	</select>
+
+</mapper>

@@ -1,0 +1,84 @@
+1.介绍系统的需求(面试重要)
+  NETCOTSS系统是一个电信计费相关的网页版管理系统.
+ 该系统主要针对电信服务器提供服务进行收费和计算,系统的使用者是电信员工.
+
+  本系统主要包含以下几个方面功能:
+  *开户先关功能:-->到电信营业厅+身份证-->开通一个账务账号 
+       -->开通一个或多个业务账号(对应具体服务)
+  用户回去使用:-->触发另外一个采集系统,将用户使用日志采集
+           (该系统不在NETCOTSS范围内)
+  *用户查看账单:-->用户就可以打电话或去营业厅查询,工作人员
+          通过账单查询模块找出具体账单详情信息.
+  
+  *资费模块:收费标准的维护,例如包月,套餐,计时等收费标准,
+            当用户开通业务账号时,需要选择某一种资费.
+  *系统权限功能:包含角色模块和管理员模块.
+          --管理员模块可以添加,修改,删除系统的登录用户信息.
+          --角色模块可以指定某个角色可以进行哪些操作.
+          --一个管理员可以分配多个角色,执行角色范围内的操作
+          --管理员都可以通过登录页面进入系统
+
+2.系统的架构设计(开发重要)
+  jQuery/Ajax+SpringMVC + Spring(IOC+AOP) + MyBatis
+
+ jQuery/Ajax:负责JSP页面校验或特效
+ Spring MVC:负责接收请求分发业务处理
+ MyBatis:负责数据库操作
+ Spring(IOC+AOP):负责系统组件结合,降低耦合度
+
+
+3.资费管理模块的实现
+ 1)搭建项目结构
+   src结构:
+      org.tarena.netctoss.controller
+      org.tarena.netctoss.controller.fee (资费模块)
+      org.tarena.netctoss.controller.login(登录模块)
+      org.tarena.netctoss.service(复杂业务追加)
+      org.tarena.netctoss.dao(MyBatis Mapper映射器)
+      org.tarena.netctoss.entity(实体类+*Map.xml放SQL)
+      org.tarena.netctoss.test(测试类)
+      org.tarena.netctoss.util(工具类)
+      org.tarena.netctoss.config(XML配置文件)
+   JSP结构
+      所有JSP放入到/WEB-INF/jsp/
+      所有的js,css,images可以放到WebRoot下
+   
+ 2)实现资费管理列表
+   1.涉及数据表: COST   (先创建表,了解COST字段含义)
+   2.引入SpringMVC,SpringIOC,MyBatis开发包及配置
+   --------列表显示--------
+   3./fee/fee_list.from-->FeeListController.execute
+      -->CostMapperDao.findAll
+      -->/WEB-INF/jsp/fee/fee_list.jsp
+   -------删除-------
+   4./fee/fee_delete.from?id=2
+    -->FeeDeleteController.execute
+    -->CostMapperDao.deleteCost
+    -->/fee/fee_list.from
+   a.在CostMap.xml中定义delete的SQL语句
+   b.在CostMapperDao接口定义delete操作方法
+   c.编写FeeDeleteController.execute
+   d.在fee_list.jsp页面添加发送fee_delete.from请求的js代码
+
+   ---------添加------------
+   5.进入添加页面
+     /fee/toAdd.from-->FeeAddController.toAdd
+      -->/fee/fee_add.jsp
+     添加操作
+     /fee/addCost.from-->FeeAddController.add
+     -->CostMapperDao.saveCost()
+     -->/fee/fee_list.from
+
+   a.在CostMap.xml中定义insert的SQL语句
+   b.在CostMapperDao接口定义insert操作方法
+   c.编写FeeAddController.add方法
+   d.修改fee_add.jsp,将表单中<input>组件name属性
+     与Cost对象属性一致
+
+   (注意:乱码问题,web.xml添加EncodingFilter配置)
+   (注意:radio组件提交的是value属性值,cost_type字段
+   1表示包月,2表示套餐,3表示计时)
+
+
+
+

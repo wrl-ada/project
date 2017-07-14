@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="org.tarena.netctoss.dao.AdminInfoMapperDao">
+	<select id="findByAdminCodeAndPwd" 
+	resultType="org.tarena.netctoss.entity.AdminInfo"
+	parameterType="org.tarena.netctoss.entity.AdminInfo">
+		select * from admin_info 
+		where admin_code=#{admin_code,jdbcType=VARCHAR} and password=#{password,jdbcType=VARCHAR}
+	</select>
+</mapper>

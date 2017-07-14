@@ -1,0 +1,75 @@
+1.资费更新
+  a.列表点更新按钮,进入更新页面,显示初始数据
+/fee/toUpdate.from?id=1
+-->FeeUpdateController.toUpdate
+-->CostMapperDao.findById
+-->/fee/fee_modi.jsp
+
+  1)完成CostMapperDao.findById
+    --在CostMap.xml中定义SQL,id为findById
+    --在CostMapperDao定义findById方法
+  2)编写FeeUpdateController的toUpdate方法
+      接收请求id值,使用@RequestParam
+      调用dao.findById查询,使用注入方式@Resource
+      将结果放入Model,利用Model参数
+      进入fee_modi.jsp
+  3)fee_modi.jsp使用标签显示Model数据(重点表单标签应用)
+  4)在列表中给更新按钮添加发送/fee/toUpdate.from?id=1格式的请求链接
+
+
+  b.修改资费数据点击提交按钮,更新到数据库,返回列表页面
+/fee/updateCost.from(post)
+-->FeeUpdateController.updateCost()
+-->CostMapperDao.updateCost()
+-->/fee/fee_list.from(进入列表显示)
+
+
+提示:当进行更新或添加操作时,遇到null值写入,需要在MyBatis
+定义SQL部分指定jdbcType属性类型.
+否则会产生无效列类型1111异常.
+一般表中允许为空的字段必须加,不允许为空的可加可不加.
+
+2.资费启用操作
+/fee/startCost.from?id=1
+-->StartCostController.execute
+-->CostMapperDao.startCost() /将记录status修改成0
+-->/fee/fee_list.from(进入列表显示)
+
+
+=========资费分页处理============
+基于SQL语句分页,显示哪页数据提取哪页.
+Oracle:
+
+第一页:
+select id,name
+from
+(select id,name,rownum rn
+from(select id,name from cost order by id))
+where rn>6 and rn<10;
+
+1 : begin>0   end<4
+2 : begin>3    end<7
+3 : begin>6    end<10
+
+page?     pageSize
+
+ begin>(page-1)*pageSize    end<page*pageSize+1
+
+
+<input type="text" name="name"/>
+${name}
+
+private String username;//成员变量名
+//setter属性名name
+public void setName(String name){
+   username = name;
+}
+//getter属性名name
+public String getName(){
+  return username;
+}
+
+
+
+
+

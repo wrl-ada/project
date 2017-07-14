@@ -1,0 +1,22 @@
+/role/add(post)-->RoleAddController.add()
+-->RoleMapperDao写入Role表角色数据;
+     RoleMapperDao写入Role_Privilege关系数据
+-->/role/role_list/1
+
+
+======角色更新========
+初始显示
+/role/1/toupdate-->RoleUpdateController.toUpdate()
+-->RoleMapperDao.findById()
+-->role_modi.jsp
+更新操作
+/role/1(PUT)-->RoleUpdateController.update()
+-->Dao操作涉及下面几个
+  更新ROLE表的NAME字段
+  更新ROLE_PRIVILEGE角色和权限对应关系信息
+   --将原有角色对应的关系清除
+   --从新执行insert插入关系数据
+-->/role/role_list/1
+
+
+

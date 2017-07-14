@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="org.tarena.netctoss.dao.RoleMapperDao">
+	<select id="findAll" resultMap="roleMap">
+		select r.ID,r.NAME,rp.ROLE_ID,rp.PRIVILEGE_ID
+		from ROLE r left outer join ROLE_PRIVILEGE rp on (r.ID=rp.ROLE_ID) order by r.ID
+	</select>
+	<resultMap type="org.tarena.netctoss.entity.Role" id="roleMap">
+		<id property="id" column="ID"/>
+		<result property="name" column="NAME"/>
+		<collection property="pris" ofType="org.tarena.netctoss.entity.RolePrivilege"
+		 javaType="java.util.ArrayList">
+		 	<result property="role_id" column="ROLE_ID"/>
+		 	<result property="privilege_id" column="PRIVILEGE_ID"/>
+		 </collection>
+	</resultMap>
+	<!-- 增加 -->
+	<insert id="saveRole" parameterType="org.tarena.netctoss.entity.Role">
+		<selectKey keyProperty="id" order="BEFORE" resultType="int">
+			select role_seq.nextval from dual
+		</selectKey>
+		insert into ROLE (id, name) values (#{id},#{name,jdbcType=VARCHAR}) 
+	</insert>
+	<!-- 删除 -->
+	<delete id="deleteRole" parameterType="int">
+		delete ROLE where ID=#{id}
+	</delete>
+</mapper>
